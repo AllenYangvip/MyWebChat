@@ -48,11 +48,11 @@ def bulid_comment_tree(itemid):
             tree_search(comment_dic,i)
 
     # 生成Html
-    html = "<div>"
+    html = "<div >"
     margin_left = 0
     for k, v in comment_dic.items():
-        html += "<div> "+"<a><span>"+k.user.name+" : "+"</span>"+k.comment + "</a></div> "
-        html += generate_comment_html(v, margin_left + 15)
+        html += "<div coment-id ='%s'> " %k.id+"<a><span>"+k.user.name+" : "+"</span>"+k.comment + "</a></div> "
+        html += generate_comment_html(v, margin_left + 10)
     html += "</div>"
     return mark_safe(html)
 
@@ -76,10 +76,10 @@ def generate_comment_html(sub_comment_dic,margin_left_val):
     # 先创建一个html默认为空
     htm = ""
     for k, v_dic in sub_comment_dic.items():  # 循环穿过来的字典
-        htm += "<div style='margin-left:%spx'  class='comment-node'>" % margin_left_val +"<span><a>"+k.user.name+" : "+"</span>"+ k.comment + "</a></div>"
+        htm += "<div style='margin-left:%spx'  class='comment-node'coment-id ='%s'>" % (margin_left_val,k.id) +"<span>|--<a>"+k.user.name+" : "+"</span>"+ k.comment + "</a></div>"
 
         if v_dic:
-            htm += generate_comment_html(v_dic, margin_left_val + 15)
+            htm += generate_comment_html(v_dic, margin_left_val +margin_left_val +3 )
     return htm
 
 

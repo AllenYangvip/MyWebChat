@@ -84,19 +84,17 @@
 
 
                                 <!-- 评论区域 -->
-                            <div class="comment-box-area" id="comment-box-area-10593236" style="margin-top: 5px;display: none;">
-                                    <div class="pinglun arrow" id="comt-arrow-10593236" style="left: 63px;"></div>
+                            <div class="comment-box-area" id="comment-box-area-{{ item.id }}" style="margin-top: 5px;display: none;">
+                                    <div class="pinglun arrow" id="comt-arrow-{{ item.id }}" style="left: 63px;"></div>
 								<a class="pinglun close-comt" title="关闭" href="javascript:void(0);"  lang=""></a>
-                                    <div class="corner comment-box" id="comment-box-10593236">
-                                        	<div class="loading-ico loading-ico-top" id="loading-comment-top-10593236" style="margin-left: 230px; display: none;">加载中，请稍候...</div>
-									<div class="comment-box-top" id="comment-box-top-10593236" style="display: block;">
-										<div class="tip-1">最热评论(<span id="newestCount-10593236">{{ item.comment_set.select_related.count }}</span>)</div>
-
+                                    <div class="corner comment-box" id="comment-box-{{ item.id }}">
+                                        	<div class="loading-ico loading-ico-top" id="loading-comment-top-{{ item.id }}" style="margin-left: 230px; display: none;">加载中，请稍候...</div>
+									<div class="comment-box-top" id="comment-box-top-{{ item.id }}" style="display: block;">
 
 
                                     <!-- 树级评论 start-->
 
-  <div style="display: block">{{ item.id | bulid_comment_tree }}</div>
+ {{ item.id | bulid_comment_tree }}
                                     <!--树级评论 end-->
 
                                         <!-- 谣言类别显示相信还是置疑选项 -->
@@ -108,33 +106,33 @@
 									<!-- 评论输入框和回复框 -->
 									<div class="huifu-top-box" id="" style="display: block;">
 										<div class="box-l txt-input-area-div-top corner no-corner-bottom">
-                                            <div id="lab-comment-top-10593236" class="lab-comment-top" style="display: none;">回复  <span id="nick--10593236"></span>:</div>
+                                            <div id="lab-comment-top-{{ item.id }}" class="lab-comment-top" style="display: none;">回复  <span id="nick--10593236"></span>:</div>
 											<!-- 针对谣言文本输入框无效 -->
 
 
 
-												<textarea lang="10593236" maxlength="150" name="txt-huifu-top" id="txt-huifu-top-10593236" class="txt-huifu txt-huifu-top" style="text-indent: 0px; height: 20px;width: 615px; resize: none;"></textarea>
+												<textarea lang="{{ item.id }}" maxlength="150" name="txt-huifu-top" id="txt-huifu-top-{{ item.id }}" class="txt-huifu txt-huifu-top" style="text-indent: 0px; height: 20px;width: 615px; resize: none;"></textarea>
 
 
 										</div>
 										<div class="box-r">
-											<a id="pub-btn-top-10593236" lang="" href="javascript:;" class="pub-icons add-pub-btn add-pub-btn-unvalid">评论</a>
-											<a id="pub-loading-top-10593236" href="javascript:;" class="loading-ico loading-ico-top pub-loading-top">发布中...</a>
+											<a id="pub-btn-top-{{ item.id }}" lang="" href="javascript:;" class="pub-icons add-pub-btn add-pub-btn-unvalid">评论</a>
+
 										</div>
 									</div>
 
 
 
 
-									<div class="tip-3" id="hidden-comt-10593236" style="display: block;">
-										<a href= ""  class="hiddenCom-Btn" lang="10593236"><em class="pinglun em2"></em><span>收起</span></a>
+									<div class="tip-3" id="hidden-comt-{{ item.id }}" style="display: block;">
+										<a href= ""  class="hiddenCom-Btn" lang="{{ item.id }}"><em class="pinglun em2"></em><span>收起</span></a>
 									</div>
 									<div class="write-error-box-top">
-										<div class="write-error-desc" id="write-error-desc-10593236" style="display: none;"></div>
+										<div class="write-error-desc" id="write-error-desc-{{ item.id }}" style="display: none;"></div>
 									</div>
                                     <!--class="corner comment-box" end-->
                                     </div>
-                                    <input type="hidden" id="hidsubjectid-10593236" value="1">
+                                    <input type="hidden" id="hidsubjectid-{{ item.id }}" value="1">
 
 
 
