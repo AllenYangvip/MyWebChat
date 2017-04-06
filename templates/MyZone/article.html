@@ -1,0 +1,29 @@
+{% extends 'Common/base.htm' %}
+{% load getImg %}
+{% block title %}
+{% endblock %}
+{% block HeadContent%}
+    <link rel="stylesheet" type="text/css" href="/static/css/common-Zone.css">
+{% endblock %}
+{% block Content %}
+    <div class="main-content">
+        <div class="content-L">
+            {% if err %}
+                <h3>err</h3>
+            {% else %}
+                <h4>{{ article.title }}</h4>
+                {% ifequal article.category.name "说说" %}
+                    {% if article.title_img %}
+                                <img src="{{ article.title_img | chat_url }} " height="150px" width="150">
+                {% endif %}
+                {% endifequal %}
+                <div>
+                    {{ article.content | safe }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block JavaScript %}
+
+{% endblock %}

@@ -1,0 +1,296 @@
+{% extends 'Common/base.htm' %}
+{% load mytags %}
+{% load getImg %}
+{# 标题 #}
+{% block title %}
+    WebZone
+{% endblock %}
+{# head 便于加载Css #}
+{% block HeadContent%}
+    <link rel="stylesheet" type="text/css" href="/static/css/common-Zone.css">
+
+{% endblock %}
+{# body 中的内容 #}
+{% block Content %}
+
+    <div class="main-content">
+        <div class="content-L">
+            <div class="nav-top-area">
+                    <div class="child-nav">
+                        <span >我的空间：</span>
+                        <a href="" hidefocus="false" class="hotbtn active icons" id="hotts-nav-btn">说说</a>
+                        <a href="" hidefocus="false" class="newbtn" id="newest-nav-btn">日志</a>
+
+
+						</div>
+
+
+						<a href="{% url 'publish' %}" class="publish-btn" id="publishBtn" lang="all">
+							<span class="ico n1"></span><span class="n2">发布</span>
+						</a>
+					</div>
+
+					<!-- 内容显示区域 -->
+
+
+
+					<div class="content-list" id="content-list">
+
+                    {% for item in Articles  %}
+
+                        <div class="item">
+                        <div class="null-item"></div>
+                            <div class="news-content" id="">
+                            <div>
+                                </font href="" class="show-content"  ><img src="{{ item.author.user.userprofile.head_img | chat_url }}" width="30px" height="30px">&nbsp;&nbsp;<a><font size="3">{{  item.author }}</font></a>
+                                <span>{{ item.publish_date | date:"H:i:s Y-m-d "}}</span>
+                            </div>
+                            {% ifequal item.category.name "日志" %}
+                                <div>
+                                    <span>发表日志：<a href="{% url 'article' item.id %}">《{{ item.title }}》</a></span>
+                                </div>
+                                <div>
+                                    {{ item.summary }}
+                                 </div>
+                            {% else %}
+                                <div>
+                                     <div style="margin: 5px 0;">{{ item.title }}</div>
+                                </div>
+                            {% endifequal %}
+                            {% if item.title_img %}
+                                <img src="{{ item.title_img | chat_url }} " height="150px" width="150">
+                            {% endif %}
+
+
+
+                        <div class="part2" shareid="{{ item.id }}" >
+                            <div id="" style="margin: 8px 0; color: #778bdd">{{ item.thumbup_set.select_related.all | get_name}}</div>
+
+                         <!-- 点赞数 start -->
+                            <a href="javascript:void(0);" class="isVoted" title="点赞" data-id="{{ item.id }}" style="display: inline-block;" >
+                                {# 判断是否当前用户点赞过 #}
+
+
+                                    <span class="hand-icon icon-digg vote-actived"></span>
+                                <b style="color: rgb(154, 221, 127);">{{ item.thumbup_set.select_related.count }}</b></a>
+                            <!-- 点赞数 end -->
+                            <a href="javascript:void(0);"  class="discus-a" data-id="{{ item.id }}" lang="" title="评论"><span class="hand-icon icon-discus"></span><b>{{ item.comment_set.select_related.count }}</b></a>
+                            <!-- 评论数 end -->
+                        </div>
+
+
+
+
+
+
+                                <!-- 评论区域 -->
+                            <div class="comment-box-area" id="comment-box-area-10593236" style="margin-top: 5px;display: none;">
+                                    <div class="pinglun arrow" id="comt-arrow-10593236" style="left: 63px;"></div>
+								<a class="pinglun close-comt" title="关闭" href="javascript:void(0);"  lang=""></a>
+                                    <div class="corner comment-box" id="comment-box-10593236">
+                                        	<div class="loading-ico loading-ico-top" id="loading-comment-top-10593236" style="margin-left: 230px; display: none;">加载中，请稍候...</div>
+									<div class="comment-box-top" id="comment-box-top-10593236" style="display: block;">
+										<div class="tip-1">最热评论(<span id="newestCount-10593236">{{ item.comment_set.select_related.count }}</span>)</div>
+
+
+
+                                    <!-- 树级评论 start-->
+
+  <div style="display: block">{{ item.id | bulid_comment_tree }}</div>
+                                    <!--树级评论 end-->
+
+                                        <!-- 谣言类别显示相信还是置疑选项 -->
+
+
+									<!-- 判断该新闻评论是否关闭 -->
+
+
+									<!-- 评论输入框和回复框 -->
+									<div class="huifu-top-box" id="" style="display: block;">
+										<div class="box-l txt-input-area-div-top corner no-corner-bottom">
+                                            <div id="lab-comment-top-10593236" class="lab-comment-top" style="display: none;">回复  <span id="nick--10593236"></span>:</div>
+											<!-- 针对谣言文本输入框无效 -->
+
+
+
+												<textarea lang="10593236" maxlength="150" name="txt-huifu-top" id="txt-huifu-top-10593236" class="txt-huifu txt-huifu-top" style="text-indent: 0px; height: 20px;width: 615px; resize: none;"></textarea>
+
+
+										</div>
+										<div class="box-r">
+											<a id="pub-btn-top-10593236" lang="" href="javascript:;" class="pub-icons add-pub-btn add-pub-btn-unvalid">评论</a>
+											<a id="pub-loading-top-10593236" href="javascript:;" class="loading-ico loading-ico-top pub-loading-top">发布中...</a>
+										</div>
+									</div>
+
+
+
+
+									<div class="tip-3" id="hidden-comt-10593236" style="display: block;">
+										<a href= ""  class="hiddenCom-Btn" lang="10593236"><em class="pinglun em2"></em><span>收起</span></a>
+									</div>
+									<div class="write-error-box-top">
+										<div class="write-error-desc" id="write-error-desc-10593236" style="display: none;"></div>
+									</div>
+                                    <!--class="corner comment-box" end-->
+                                    </div>
+                                    <input type="hidden" id="hidsubjectid-10593236" value="1">
+
+
+
+                                 <!-- 评论区域 end -->
+                                </div>
+
+
+
+
+
+
+                        <!--class="news-content" end-->
+                        </div>
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                    <!--item end-->
+                    </div>
+                    {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}
+{# JS #}
+{% block JavaScript %}
+<script>
+
+
+
+
+    //Document ready
+    $(document).ready( function () {
+        ChangeThumbUpState("123");
+       $("a.discus-a").click(function(){
+                    var id = $(this).attr("data-id");
+
+					var allStyle=$(this).parent().next().attr("style");
+
+					if(allStyle.indexOf("display: none;")!=-1){
+						$(this).parent().next().css("display","block");
+					}else{
+						$(this).parent().next().css("display","none");
+					}
+				});
+
+
+       $("a.isVoted").click(function(){
+           var id = $(this).attr("data-id");
+           $.ajax({
+                url:"{% url 'changeThumbUps' %}",
+                method:"POST",
+                data:{tpid:id},
+                success:function (arg) {
+                    console.log(arg);
+                    if( arg == "true" ){
+
+                    }else{
+
+                    }
+                },
+                error:function () {
+
+                }
+        });
+
+
+
+
+                    //存放新的点赞用户
+					var newdzUName='';
+					//登录用户是否存在点赞
+					var loginIsExist=false;
+					//获取点赞的数量
+					var dzCount=parseInt($(this).children("b").text());
+					//console.log(dzCount);
+					//获取登录的用户名
+					var loginUName="{{ request.user.userprofile.name }}";
+					//获取所有的点赞的人的名称
+					var allDZName=$(this).prev().text().split("     ");
+					if(allDZName.indexOf(loginUName,0)!=-1){
+						loginIsExist=true;
+					}
+					if(loginIsExist){
+						dzCount--;
+						newdzUName='';
+						$.each(allDZName, function(index,val) {
+							if(loginUName!=val){
+								newdzUName+=val+"     ";
+							}
+						});
+						newdzUName=newdzUName.substring(0,newdzUName.length-3);
+					}else{
+						dzCount++;
+						newdzUName='';
+						newdzUName+=loginUName;
+						$.each(allDZName, function(index,val) {
+							newdzUName+="     "+val;
+						});
+					}
+					//将点赞的数量添加到页面
+					$(this).children("b").text(dzCount)
+					//将新添加到页面的显示点赞名称的位置
+					$(this).prev().text(newdzUName);
+
+				});
+
+
+    });
+    // changeThumbUp
+    function changeThumbUp() {
+        $.ajax({
+            url:"{% url 'changeThumbUps' %}",
+            method:"POST",
+            data:{tpid:"13"},
+            success:function (arg) {
+                console.log(arg);
+                if( arg == "true" ){
+
+                }else{
+
+                }
+            },
+            error:function () {
+
+            }
+        });
+
+
+    }
+    // changeThumbUp end
+    function ChangeThumbUpState(stat){
+
+        if( stat == "true"){
+
+        }
+        else{
+
+        }
+
+
+    }
+
+
+</script>
+{% endblock %}
