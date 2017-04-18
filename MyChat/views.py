@@ -2,10 +2,9 @@
 from django.shortcuts import render, HttpResponseRedirect,HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
 from MyChat.templatetags.getImg import chat_url
 import models
-import Queue,json,time,hashlib,os
+import Queue,json,time
 
 
 

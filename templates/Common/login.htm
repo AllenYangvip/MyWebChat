@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <!-- saved from url=(0038)http://v3.bootcss.com/examples/signin/ -->
 <html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,25 +20,27 @@
 
     <!-- Custom styles for this template -->
     <link href="/static/css/signin.css" rel="stylesheet">
-
+    <style type="text/css">
+         .btn-group-lg>.btn, .btn-lg{padding:6px 12px;}
+    </style>
 
     <script src="/static/js/ie-emulation-modes-warning.js"></script>
 
 
   </head>
 
-  <body>
+  <body style="background:url('/static/img/bg1.jpg') top center; background-size: cover">
 
-    <div class="container">
+    <div class="container"style="background: rgba(0,0,0,0.1);border-radius:5px;box-shadow: 0 0 10px 5px rgba(0,0,0,0.4); width: 300px; height: 300px;position:absolute;right: 300px; bottom: 180px;">
 
       <form class="form-signin" action="{% url 'login' %}" method="post" >
           {% csrf_token %}
         <h2 class="form-signin-heading">Please Login</h2>
         <label for="inputEmail" class="sr-only">User:</label>
-        <input type="text" id=""name="inputUser" class="form-control" placeholder="User Name" required="" autofocus="">
+        <input type="text" style="margin-top: 35px" id=""name="inputUser" class="form-control" placeholder="User Name" required="" autofocus="">
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="inputPassword" class="form-control" placeholder="Password" required="">
-          <span >{{ err }}</span>
+        <input type="password" style="margin: 20px 0" name="inputPassword" class="form-control" placeholder="Password" required="">
+          <span style="color: red"><b>{{ err }}</b></span>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
       </form>
 

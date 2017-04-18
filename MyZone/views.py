@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render,HttpResponse,render_to_response
+from django.shortcuts import render,HttpResponse,render_to_response,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from MyZone import models,forms
 from django.core.exceptions import ObjectDoesNotExist
 import json
+from pager import Pager
 
 # Create your views here.
 
@@ -20,9 +21,40 @@ def index(request):
     # 先获取该请求用户的所有好友然后于根据好友查找好友说说与日志
     friends = request.user.userprofile.friends.select_related()
     ALL_DATA['Articles'] = models.Article.objects.filter(author__in=friends).order_by("-publish_date")
-    ALL_DATA['Articles']
-    # ALL_DATA['ThumbUps'] = models.ThumbUp.objects.all()
     return render(request, 'MyZone/Zone.html', ALL_DATA)
+
+
+@login_required
+def Comment(request):
+    data = {}
+    if request.method == 'POST':
+        recv_data = json.loads(request.POST.get('data'))
+
+        #parent_comment = request.POST.get("parent_comment", None)
+        if recv_data["parent_comment_user"] != '' and recv_data["parent_comment_id"] != '':
+            parent_comment_user = recv_data["parent_comment_user"]
+            parent_comment_id = recv_data["parent_comment_id"]
+        else:
+            parent_comment_user = None
+            parent_comment_id = None
+        data["article"] =models.Article.objects.get(id=int(recv_data["article_id"]))
+        data["comment"] = recv_data["comment"]
+        data["user"] = request.user.userprofile
+        if parent_comment_user is not None and parent_comment_id is not None:
+            #parent_comment_user_id = models.UserProfile.objects.get(name=parent_comment_user).id
+            user = models.UserProfile.objects.get(name=parent_comment_user)
+            #parent_id = models.Comment.objects.get(id= parent_comment_id)
+            commentobj = models.Comment.objects.get(user=user,id=parent_comment_id)
+            print commentobj
+            if commentobj:
+                data['parent_comment'] = commentobj
+            newobj = models.Comment(article=data['article'],comment=data["comment"],user=data["user"],parent_comment=data['parent_comment'])
+        else:
+            newobj = models.Comment(article=data['article'], comment=data["comment"], user=data["user"])
+        newobj.save()
+        return HttpResponse("true")
+
+
 
 
 @login_required
@@ -75,11 +107,51 @@ def publish(request):
 
 @login_required
 def article(request,id):
+    """
+
+    :param request:
+    :param id:
+    :return:
+    """
     try:
         art_obj = models.Article.objects.get(id= id)
     except ObjectDoesNotExist as e:
         return render_to_response('Common/404.html', {'err': 'The article is not exist!!'})
 
     return render(request,'MyZone/article.html',{'article':art_obj})
+
+
+@login_required
+def saides(request):
+    """
+    :param request:
+    :return:
+    """
+    ALL_DATA = {}
+    try:
+        ALL_DATA['Articles'] = models.Article.objects.filter(author=request.user.userprofile.id,category__name=u"说说").order_by("-publish_date")
+    except Exception as e:
+        return render_to_response('Common/404.html', {'err': e})
+    return render(request, 'MyZone/Zone.html', ALL_DATA)
+
+
+@login_required
+def articles(request):
+    """
+
+    :param request:
+    :return:
+    """
+    ALL_DATA = {}
+    try:
+        ALL_DATA['Articles'] = models.Article.objects.filter(author=request.user.userprofile.id, category__name=u"日志").order_by("-publish_date")
+    except Exception as e:
+        return render_to_response('Common/404.html', {'err': e})
+    return render(request, 'MyZone/Zone.html', ALL_DATA)
+
+
+
+
+
 
 

@@ -4,6 +4,10 @@
 {% endblock %}
 {% block HeadContent%}
     <link rel="stylesheet" type="text/css" href="/static/css/common-Zone.css">
+    <style type="text/css">
+    div.content-L h3{text-align: center;margin: 20px 0;}
+    div.content-L>div>p{margin-top: 15px; text-indent: 2em; line-height: 22px;}
+    </style>
 {% endblock %}
 {% block Content %}
     <div class="main-content">
@@ -11,7 +15,7 @@
             {% if err %}
                 <h3>err</h3>
             {% else %}
-                <h4>{{ article.title }}</h4>
+                <h3>{{ article.title }}</h3>
                 {% ifequal article.category.name "说说" %}
                     {% if article.title_img %}
                                 <img src="{{ article.title_img | chat_url }} " height="150px" width="150">
