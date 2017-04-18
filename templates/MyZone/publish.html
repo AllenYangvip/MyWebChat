@@ -4,6 +4,11 @@
 {% endblock %}
 {% block HeadContent%}
     <link rel="stylesheet" type="text/css" href="/static/css/common-Zone.css">
+    <style type="text/css">
+        .form-control{width: 200px;}
+        .btn-group-lg>.btn, .btn-lg{padding:6px 12px;}
+        #summary{display: none;}
+    </style>
      <script src="/static/plugins/ckeditor/ckeditor.js"></script>
 {% endblock %}
 {% block Content %}
@@ -16,26 +21,27 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="exampleInputName2">发表类型：</label>
-            <select class="form-control" name="category" >
+            <select class="form-control" name="category" id="category" >
                     {% for category in category %}
                      <option value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
                     </select>
         </div>
         <div class="form-group" >
-            <label for="exampleInputName2">Title</label>
+            <label for="exampleInputName2" id="categoryTypeName">说说</label>
             <input type="text" class="form-control" name="title" id="exampleInputName2" placeholder="">
         </div>
         <div class="form-group">
             <label for="exampleInputFile">上传图片：</label>
             <input type="file" id="exampleInputFile" name="title_img">
         </div>
-        <div class="form-group">
+        <div class="form-group" id="summary">
             <label for="exampleInputName2">总结：</label>
-            <input type="text" name="summary" class="form-control" id="exampleInputName2" placeholder="总结">
-        </div>
-        <textarea name="content" id="editor1" rows="10" cols="80">
+            <input type="text" name="summary" class="form-control" id="exampleInputName2" placeholder="总结" style="margin-bottom: 15px">
+            <textarea name="content" id="editor1" rows="10" cols="80">
         </textarea>
+        </div>
+
         <button type="submit" class="btn btn-primary btn-lg active pull-right">提交</button>
     </form>
         {% endif %}
@@ -46,5 +52,15 @@
 {% block JavaScript %}
     <script>
         CKEDITOR.replace( 'content' );
+        //var selectValue=$("#category").find("option:selected").text();
+        $("#category").change(function () {
+             var selectValue=$("#category").find("option:selected").text();
+            $("#categoryTypeName").text(selectValue);
+            if(selectValue=="说说"){
+                $("#summary").css("display","none");
+            }else{
+                $("#summary").css("display","block");
+            }
+        })
     </script>
 {% endblock %}

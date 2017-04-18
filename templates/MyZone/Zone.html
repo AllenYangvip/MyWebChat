@@ -8,7 +8,13 @@
 {# head 便于加载Css #}
 {% block HeadContent%}
     <link rel="stylesheet" type="text/css" href="/static/css/common-Zone.css">
-
+    <style type="text/css">
+    div.comentList>div{line-height: 25px;}
+    a{cursor: pointer;}
+    div.comentList>div a{padding: 5px 0;}
+    div.comentList>div a:hover{background: rgba(0,0,0,0.1);}
+    div#replayName{margin:10px 0;color: #337ab7; font-weight:bold;}
+    </style>
 {% endblock %}
 {# body 中的内容 #}
 {% block Content %}
@@ -104,14 +110,17 @@
 
 
 									<!-- 评论输入框和回复框 -->
+
 									<div class="huifu-top-box" id="" style="display: block;">
+
 										<div class="box-l txt-input-area-div-top corner no-corner-bottom">
+                                            <div id="replayName"></div>
                                             <div id="lab-comment-top-{{ item.id }}" class="lab-comment-top" style="display: none;">回复  <span id="nick--10593236"></span>:</div>
 											<!-- 针对谣言文本输入框无效 -->
 
 
 
-												<textarea lang="{{ item.id }}" maxlength="150" name="txt-huifu-top" id="txt-huifu-top-{{ item.id }}" class="txt-huifu txt-huifu-top" style="text-indent: 0px; height: 20px;width: 615px; resize: none;"></textarea>
+												<textarea lang="{{ item.id }}" maxlength="150" name="txt-huifu-top" id="txt-huifu-top-{{ item.id }}" class="txt-huifu txt-huifu-top" style="text-indent: 0px; width: 615px; resize: none;"></textarea>
 
 
 										</div>
@@ -125,7 +134,7 @@
 
 
 									<div class="tip-3" id="hidden-comt-{{ item.id }}" style="display: block;">
-										<a href= ""  class="hiddenCom-Btn" lang="{{ item.id }}"><em class="pinglun em2"></em><span>收起</span></a>
+										<a href= "javascript:;"  class="hiddenCom-Btn" lang="{{ item.id }}"><em class="pinglun em2"></em><span>收起</span></a>
 									</div>
 									<div class="write-error-box-top">
 										<div class="write-error-desc" id="write-error-desc-{{ item.id }}" style="display: none;"></div>
@@ -288,7 +297,21 @@
 
 
     }
+    //关闭按钮
+    $("a.pinglun.close-comt").click(function () {
+        $(this).parent().css("display","none");
+    })
+    //收起按钮
+    $("a.hiddenCom-Btn").click(function () {
+        $(this).parent().parent().parent().parent().css("display","none");
+    })
+    //点击要回复在评论
+    $("div.comentList>div>a").click(function () {
+        var userName=$(this).prev().find('span.userName').text();
+        var userId=$(this).parent().attr("coment-id");
+        $("div#replayName").html("回复  <span comment-id='"+userId+"'>"+userName+"</span>");
 
+    })
 
 </script>
 {% endblock %}
