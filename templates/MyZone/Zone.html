@@ -13,10 +13,7 @@
     a{cursor: pointer;}
     div.comentList>div a{padding: 5px 0;}
     div.comentList>div a:hover{background: rgba(0,0,0,0.1);}
-    div.replayName{margin:10px 0;color: #337ab7; font-weight:bold;}
-
-    .huifu-top-box { position: relative; width: 100%;}
-    .huifu-top-box .box-r {position: absolute;right: 0;bottom: 0;}
+    div#replayName{margin:10px 0;color: #337ab7; font-weight:bold;}
     </style>
 {% endblock %}
 {# body 中的内容 #}
@@ -27,8 +24,9 @@
             <div class="nav-top-area">
                     <div class="child-nav">
                         <span >我的空间：</span>
-                        <a href="{% url 'saides_of_mine' %}" hidefocus="false" class="hotbtn active icons" id="hotts-nav-btn">说说</a>
-                        <a href="{% url 'articles_of_mine' %}" hidefocus="false" class="newbtn" id="newest-nav-btn">日志</a>
+                        <a href="" hidefocus="false" class="hotbtn active icons" id="hotts-nav-btn">说说</a>
+                        <a href="" hidefocus="false" class="newbtn" id="newest-nav-btn">日志</a>
+
 
 						</div>
 
@@ -50,8 +48,8 @@
                         <div class="null-item"></div>
                             <div class="news-content" id="">
                             <div>
-                                <span class="show-content"  ><img src="{{ item.author.user.userprofile.head_img | chat_url }}" width="30px" height="30px">&nbsp;&nbsp;<a><font size="3">{{  item.author }}</font></a>
-                                <span>{{ item.publish_date | date:"H:i:s Y-m-d " }}</span></span>
+                                </font href="" class="show-content"  ><img src="{{ item.author.user.userprofile.head_img | chat_url }}" width="30px" height="30px">&nbsp;&nbsp;<a><font size="3">{{  item.author }}</font></a>
+                                <span>{{ item.publish_date | date:"H:i:s Y-m-d "}}</span>
                             </div>
                             {% ifequal item.category.name "日志" %}
                                 <div>
@@ -116,7 +114,7 @@
 									<div class="huifu-top-box" id="" style="display: block;">
 
 										<div class="box-l txt-input-area-div-top corner no-corner-bottom">
-                                            <div class="replayName"></div>
+                                            <div id="replayName"></div>
                                             <div id="lab-comment-top-{{ item.id }}" class="lab-comment-top" style="display: none;">回复  <span id="nick--10593236"></span>:</div>
 											<!-- 针对谣言文本输入框无效 -->
 
@@ -127,7 +125,7 @@
 
 										</div>
 										<div class="box-r">
-											<a pub-btn-top-id="{{ item.id }}" lang="" href="javascript:;" class="pub-icons add-pub-btn add-pub-btn-unvalid">评论</a>
+											<a id="pub-btn-top-{{ item.id }}" lang="" href="javascript:;" class="pub-icons add-pub-btn add-pub-btn-unvalid">评论</a>
 
 										</div>
 									</div>
@@ -179,9 +177,6 @@
                     {% endfor %}
 
         </div>
-
-    </div>
-
     </div>
 {% endblock %}
 {# JS #}
@@ -193,8 +188,6 @@
 
     //Document ready
     $(document).ready( function () {
-
-
         ChangeThumbUpState("123");
        $("a.discus-a").click(function(){
                     var id = $(this).attr("data-id");
@@ -307,41 +300,16 @@
     //关闭按钮
     $("a.pinglun.close-comt").click(function () {
         $(this).parent().css("display","none");
-        $(this).next().find("div.huifu-top-box").find("div.txt-input-area-div-top").find("div.replayName").html('');
-        $(".txt-huifu-top").val('');
     })
     //收起按钮
     $("a.hiddenCom-Btn").click(function () {
         $(this).parent().parent().parent().parent().css("display","none");
-       $(this).parent().prev().find("div.txt-input-area-div-top").find("div.replayName").html('');
-       $(".txt-huifu-top").val('');
     })
     //点击要回复在评论
     $("div.comentList>div>a").click(function () {
         var userName=$(this).prev().find('span.userName').text();
         var userId=$(this).parent().attr("coment-id");
-        $(this).parent().parent().next().find("div.box-l").find("div.replayName").html("回复  <span comment-id='"+userId+"'>"+userName+"</span>");
-        console.log($(this).parent().parent().next().find("div.box-l").find("div.replayName"));
-        //$("div.replayName").html("回复  <span comment-id='"+userId+"'>"+userName+"</span>");
-
-    })
-
-    //提交评论按钮
-    $("div.box-r").on("click",'a.add-pub-btn',function () {
-        var parent_comment_id = $(this).parent().prev().find('div.replayName').find('span').attr('comment-id');
-        if(parent_comment_id=="" || parent_comment_id==undefined){
-            parent_comment_id="";
-        }
-        var commentObj={
-            'parent_comment_user':$(this).parent().prev().find('div.replayName').find('span').text(),
-            'parent_comment_id':parent_comment_id,
-            'article_id':$(this).attr("pub-btn-top-id"),
-            'comment':$(this).parent().prev().find("textarea").val()
-        };
-        //post请求发送给后端
-            $.post("{% url 'newComment' %}", {data:JSON.stringify(commentObj)},function(callback){
-                console.log(callback);
-            });//end post
+        $("div#replayName").html("回复  <span comment-id='"+userId+"'>"+userName+"</span>");
 
     })
 
