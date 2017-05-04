@@ -1,2 +1,2 @@
 "# MyWebChat" 
-Django== 1.9.7
+
