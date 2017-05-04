@@ -1,0 +1,8 @@
+Django==1.9.7
+django-crontab==0.7.1
+django-filter==1.0.1
+image==1.5.5
+Markdown==2.6.7
+olefile==0.44
+PyMySQL==0.7.9
+

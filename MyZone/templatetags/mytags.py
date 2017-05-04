@@ -46,7 +46,6 @@ def bulid_comment_tree(itemid):
             comment_dic[i] = {}
         else:
             tree_search(comment_dic,i)
-
     # 生成Html
     html = "<div class='comentList'>"
     margin_left = 0
