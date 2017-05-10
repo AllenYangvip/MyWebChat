@@ -53,7 +53,8 @@ def Comment(request):
         else:
             newobj = models.Comment(article=data['article'], comment=data["comment"], user=data["user"])
         newobj.save()
-        return HttpResponse("true")
+
+        return HttpResponse('true')
 
 
 
@@ -137,7 +138,7 @@ def saides(request):
 
 
 @login_required
-def articles(request):
+def articleslist(request):
     """
 
     :param request:
