@@ -76,7 +76,7 @@ def get_new_msgs(request):
     q_obj = GLOBAL_MSG_QUEUES[request.user.userprofile.id]
     msg_list = []
     print(msg_list)
-    if msg_count >0:
+    if msg_count > 0:
         for msg in xrange(msg_count):
             msg_list.append(q_obj.get())
         print("new msgs:",msg_list)

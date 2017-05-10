@@ -6,6 +6,18 @@
 {% endblock %}
 {% block HeadContent%}
     <link rel="stylesheet" href="/static/css/Chat.css" />
+    <link type="text/css" rel="stylesheet" href="/static/css/reset.css" />
+
+    <style>
+        /* qqFace */
+.qqFace{margin-top:4px;background:#fff;padding:2px;border:1px #dfe6f6 solid;}
+.qqFace table td{padding:0px;}
+.qqFace table td img{cursor:pointer;border:1px #fff solid;}
+.qqFace table td img:hover{border:1px #0066cc solid;}
+span.emotion{width:42px;height:20px;background:url(http://www.16code.com/cache/demos/user-say/img/icon.gif) no-repeat 2px 2px;padding-left:20px;cursor:pointer}
+span.emotion:hover{background-position:2px -28px}
+
+    </style>
 {% endblock %}
 {# body 中的内容 #}
 {% block Content %}
@@ -123,24 +135,60 @@
 {#                工具包#}
                 <div class="chat-box-tools">
                     <a title="表情" href="#" class="chat-box-tools-emoj"></a>
+{#                    <p><span class="emotion">表情</span></p>#}
                    {% comment %} <a class="chat-box-tools-screencut" title="截屏"></a>
                     <a class="chat-box-tools-file_img" title="截屏"></a>{% endcomment %}
                  </div>
 {#                工具包结束#}
 {#                输入框#}
                 <div>
-                    <textarea class="textflex"></textarea>
+                    <textarea class="textflex" id="saytext" name="saytext" ></textarea>
                 </div>
                 <div class="action">
                     <span class="desc">按下Ctrl+Enter换行</span>
-                    <a class="btn btn-send" href="">发送</a>
+                    <button type="button" class="btn btn-sm btn-default" onClick="Fasong()">发送</button>
                 </div>
             </div>
     </div>
 {% endblock %}
 {% block JavaScript %}
+    <script type="text/javascript" src="/static/js/jquery.qqFace.js"></script>
     <script>
     //------------------------------------------------------------------------------------------
+    //===================================qq 表情=================================================
+    $(function(){
+	$('.chat-box-tools-emoj').qqFace({
+		id : 'facebox',
+		assign:'saytext',
+		path:'/static/img/arclist/'	//表情存放的路径
+	});
+
+});
+    //============发送消息按钮的单击事件===========
+    function Fasong() {
+		 var msg_text = $("textarea").val();
+                if ($.trim(msg_text).length > 0){
+                    console.log(msg_text);
+                    //当接收到消息发送到后端的函数
+                    SendMsg(msg_text);
+                }
+                //把当前内容发送到对话框里
+
+
+                AddSentMsgIntoBox(replace_em(msg_text),'text');
+                $("textarea").val('');
+    }
+    //============发送消息按钮的单击事件===========////
+//查看结果消息表情转换
+function replace_em(str){
+	str = str.replace(/\</g,'&lt;');
+	str = str.replace(/\>/g,'&gt;');
+	str = str.replace(/\n/g,'<br/>');
+	str = str.replace(/\[em_([0-9]*)\]/g,'<img src="/static/img/arclist/$1.gif" border="0" />');
+	return str;
+}
+
+    //======================================qq 表情==============================================
     //定义全局字典 存放一对一聊天记录和群组聊天记录
     GLOBAL_CHAT_RECORD_DIC = {
         'single':{},
@@ -166,7 +214,10 @@
                     SendMsg(msg_text);
                 }
                 //把当前内容发送到对话框里
-                AddSentMsgIntoBox(msg_text,'text');
+
+
+                AddSentMsgIntoBox(replace_em(msg_text),'text');
+{#                AddSentMsgIntoBox(msg_text,'text');#}
                 $("textarea").val('');
             }
         });
@@ -279,7 +330,9 @@ function SendMsg(msg_text){
                 "    <div class='bubble bubble_primary left'>"+
                 "        <div class='bubble_cont'>"+
                 "            <div class='plain'>"+
-                "                    <pre style='overflow:hidden;'>" + callback[i].msg + "</pre>" +
+
+        "                    <pre style='overflow:hidden;'>" + replace_em(callback[i].msg) + "</pre>" +
+{#                "                    <pre style='overflow:hidden;'>" + callback[i].msg + "</pre>" +#}
                 "            </div>"+
                 "       </div>"+
                 "    </div>"+
@@ -318,6 +371,8 @@ function SendMsg(msg_text){
     //前端显示对话--------------------------------开始---------------------------------------------------
     function AddSentMsgIntoBox(msg_text,msg_type){
         if (msg_type == 'text'){
+
+
             var new_msg_ele = "<div  style='overflow: hidden;'>" +
                         "<div class='message me'>" +
                             "<p class='message-info'>" +

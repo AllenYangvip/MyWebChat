@@ -48,7 +48,8 @@ def Comment(request):
             print commentobj
             if commentobj:
                 data['parent_comment'] = commentobj
-            newobj = models.Comment(article=data['article'],comment=data["comment"],user=data["user"],parent_comment=data['parent_comment'])
+            newobj = models.Comment(article=data['article'],comment=data["comment"],user=data["user"],
+                                    parent_comment=data['parent_comment'])
         else:
             newobj = models.Comment(article=data['article'], comment=data["comment"], user=data["user"])
         newobj.save()
