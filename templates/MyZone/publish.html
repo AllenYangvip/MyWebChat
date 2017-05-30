@@ -17,7 +17,8 @@
         {% if art %}
             <h4>{{ art.category.name }} :《{{ art.title }}》 已发布！<a href="{% url 'article' art.id %}">点击查看</a></h4>
         {% else %}
-            <form method="POST" action="{% url 'publish' %}" enctype="multipart/form-data">
+            {% comment %}<form method="POST" action="{% url 'publish' %}" enctype="multipart/form-data">{% endcomment %}
+            <form method="POST" id="myForm">
         {% csrf_token %}
         <div class="form-group">
             <label for="exampleInputName2">发表类型：</label>
@@ -28,8 +29,8 @@
                     </select>
         </div>
         <div class="form-group" >
-            <label for="exampleInputName2" id="categoryTypeName">说说</label>
-            <input type="text" class="form-control" name="title" id="exampleInputName2" placeholder="">
+            <label for="exampleInputName1" id="categoryTypeName">说说</label>
+            <input type="text" class="form-control" required name="title" id="exampleInputName1" placeholder="">
         </div>
         <div class="form-group">
             <label for="exampleInputFile">上传图片：</label>
@@ -42,7 +43,7 @@
         </textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-lg active pull-right">提交</button>
+        <button type="button" class="btn btn-primary btn-lg active pull-right" id="sub">提交</button>
     </form>
         {% endif %}
         </div>
@@ -50,8 +51,13 @@
     </div>
 {% endblock %}
 {% block JavaScript %}
+     <script src="/static/js/jquery-3.2.1.min.js"></script>
+
+<script src="/static/js/jq1.7-jq1.9.js"></script>
+<script src="/static/js/bootstrap.js"></script>
     <script>
-        CKEDITOR.replace( 'content' );
+
+        var editor=CKEDITOR.replace( 'content' );
         //var selectValue=$("#category").find("option:selected").text();
         $("#category").change(function () {
              var selectValue=$("#category").find("option:selected").text();
@@ -62,5 +68,29 @@
                 $("#summary").css("display","block");
             }
         })
+
+    $("#sub").click(function () {
+        var selectValue=$("#category").find("option:selected").text();
+        if(selectValue=="说说"){
+            if(isNullValue("exampleInputName1")){
+                $("#myForm").submit();
+            }else{
+                $("#exampleInputName1").focus();
+                alert("说说内容不能为空！");
+            }
+        }else{
+            if(isNullValue("exampleInputName1") && isNullValue("exampleInputName2") && editor.getData().trim().length>0){
+                $("#myForm").submit();
+            }else {
+                alert("数据不能为空！");
+            }
+        }
+    })
+    function isNullValue(idName) {
+        if($("#"+idName).val().length>0){
+            return true;
+        }
+        return false;
+    }
     </script>
 {% endblock %}

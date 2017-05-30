@@ -19,7 +19,7 @@ import views
 urlpatterns = [
     url(r'^Friends/All', views.index, name='zone'),
     url(r'^Mine/Saides',views.saides,name='saides_of_mine'),
-    url(r'^Mine/articles',views.articles,name='articles_of_mine'),
+    url(r'^Mine/articlelist',views.articleslist,name='articles_of_mine'),
     url(r'^changeThumbUps', views.change_ThumbUps, name="changeThumbUps"),
     url(r'^publish_msg',views.publish,name="publish"),
     url(r'^article/(\d*)/',views.article,name="article"),

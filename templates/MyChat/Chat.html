@@ -119,11 +119,14 @@ span.emotion:hover{background-position:2px -28px}
         </div>
     {#切换结束-------------------------------------------------------------------------------#}
          <div class="chat-box">
+             <div style="width:120px;height:110px;top:200px;left:270px;position:absolute;background:url('/static/img/noChart.png') -150px 15px no-repeat">
+                 <p id="noChartText" style="margin: 110px 0 0;color: #999; text-align: center">未选择聊天</p>
+             </div>
 {#                聊天对方的用户名#}
                 <div class="chat-box-title" contact-type="" contact-id="">
-                    <div class="title-content">
+                    <div class="title-content" style="z-index:999;">
                         <div class="title-info">
-                            <a class="title-name"></a>
+                            <a class="title-name" id="title-name"></a>
                         </div>
                     </div>
                 </div>
@@ -152,6 +155,11 @@ span.emotion:hover{background-position:2px -28px}
     </div>
 {% endblock %}
 {% block JavaScript %}
+     <script src="/static/js/jquery-3.2.1.min.js"></script>
+
+<script src="/static/js/jq1.7-jq1.9.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+
     <script type="text/javascript" src="/static/js/jquery.qqFace.js"></script>
     <script>
     //------------------------------------------------------------------------------------------
@@ -163,7 +171,19 @@ span.emotion:hover{background-position:2px -28px}
 		path:'/static/img/arclist/'	//表情存放的路径
 	});
 
+
 });
+    //判断有没有聊天在用户
+    function ChartUser(){
+       var chartUser = $("#title-name").text();
+       if(chartUser){
+            return true;
+       }else{
+           return false;
+       }
+
+    }
+
     //============发送消息按钮的单击事件===========
     function Fasong() {
 		 var msg_text = $("textarea").val();
@@ -171,11 +191,13 @@ span.emotion:hover{background-position:2px -28px}
                     console.log(msg_text);
                     //当接收到消息发送到后端的函数
                     SendMsg(msg_text);
+
+                    AddSentMsgIntoBox(replace_em(msg_text),'text');
                 }
                 //把当前内容发送到对话框里
 
 
-                AddSentMsgIntoBox(replace_em(msg_text),'text');
+                //AddSentMsgIntoBox(replace_em(msg_text),'text');
                 $("textarea").val('');
     }
     //============发送消息按钮的单击事件===========////
@@ -201,6 +223,11 @@ function replace_em(str){
 //------------------------------------------------------------------------------------------
 //打开页面自动加载
     $(document).ready(function(){
+         if(!ChartUser()){
+             //设置文本框不可用，表情不可用
+             $("div.chat-box>div>textarea").attr("disabled",true);
+             $("a.chat-box-tools-emoj").css("visibility","hidden");
+         };
 
         GetNewMsgs();//开始去取消息
         //发送消息
@@ -285,6 +312,17 @@ function SendMsg(msg_text){
             $(".chat-box-title").attr("contact-id",contact_id);
             //好友类型
             $(".chat-box-title").attr("contact-type",contact_type);
+
+            //点击好友在时候把输入框在禁用去掉
+            if(ChartUser()){
+                //设置文本框可用
+                 $("div.chat-box>div>textarea").attr("disabled",false);
+                 //设置表情可以选择
+                 $("a.chat-box-tools-emoj").css("visibility","visible");
+                 $("#noChartText").css("display","none");
+                 console.log($("#title-name").text());
+             };
+
             //取出聊天记录
             var new_contact_chat_record = GLOBAL_CHAT_RECORD_DIC[contact_type][contact_id];
             //判断聊天记录是否为空

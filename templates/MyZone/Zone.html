@@ -14,6 +14,16 @@
     div.comentList>div a{padding: 5px 0;}
     div.comentList>div a:hover{background: rgba(0,0,0,0.1);}
     div#replayName{margin:10px 0;color: #337ab7; font-weight:bold;}
+
+
+    .huifu-top-box {
+			    position: relative;
+			}
+			.huifu-top-box .box-r {
+			    position: absolute;
+			    right: 0;
+			    bottom: 0px;
+			}
     </style>
 {% endblock %}
 {# body 中的内容 #}
@@ -24,8 +34,8 @@
             <div class="nav-top-area">
                     <div class="child-nav">
                         <span >我的空间：</span>
-                        <a href="" hidefocus="false" class="hotbtn active icons" id="hotts-nav-btn">说说</a>
-                        <a href="" hidefocus="false" class="newbtn" id="newest-nav-btn">日志</a>
+                        <a href="{% url 'saides_of_mine' %}" hidefocus="false" class="hotbtn" id="hotts-nav-btn">说说</a>
+                        <a href="{% url 'articles_of_mine' %}" hidefocus="false" class="newbtn" id="newest-nav-btn">日志</a>
 
 
 						</div>
@@ -93,7 +103,7 @@
                             <div class="comment-box-area" id="comment-box-area-{{ item.id }}" style="margin-top: 5px;display: none;">
                                     <div class="pinglun arrow" id="comt-arrow-{{ item.id }}" style="left: 63px;"></div>
 								<a class="pinglun close-comt" title="关闭" href="javascript:void(0);"  lang=""></a>
-                                    <div class="corner comment-box" id="comment-box-{{ item.id }}">
+                                    <div class="corner comment-box" comment-box-id="{{ item.id }}">
                                         	<div class="loading-ico loading-ico-top" id="loading-comment-top-{{ item.id }}" style="margin-left: 230px; display: none;">加载中，请稍候...</div>
 									<div class="comment-box-top" id="comment-box-top-{{ item.id }}" style="display: block;">
 
@@ -179,6 +189,10 @@
 {% endblock %}
 {# JS #}
 {% block JavaScript %}
+<script src="/static/js/jquery-3.2.1.min.js"></script>
+
+<script src="/static/js/jq1.7-jq1.9.js"></script>
+<script src="/static/js/bootstrap.js"></script>
 <script>
 
 
@@ -298,19 +312,54 @@
     //关闭按钮
     $("a.pinglun.close-comt").click(function () {
         $(this).parent().css("display","none");
+        $(this).next().find("div#replayName").html('');
+        $(this).next().find("textarea.txt-huifu.txt-huifu-top").val('');
     })
     //收起按钮
     $("a.hiddenCom-Btn").click(function () {
         $(this).parent().parent().parent().parent().css("display","none");
+        $(this).parent().prev().find("div#replayName").html('');
+        $(this).parent().prev().find("textarea.txt-huifu.txt-huifu-top").val('');
     })
     //点击要回复在评论
     $("div.comentList>div>a").click(function () {
         var userName=$(this).prev().find('span.userName').text();
         var userId=$(this).parent().attr("coment-id");
-        $("div#replayName").html("回复  <span comment-id='"+userId+"'>"+userName+"</span>");
-
+        $(this).parent().parent().next().find("div.box-l>div#replayName>span").text(userName);
+{#        $("div#replayName").html("回复  <span comment-id='"+userId+"'>"+userName+"</span>");#}
+        $(this).parent().parent().next().find("div#replayName").html("回复  <span comment-id='" + userId + "'>" + userName + "</span>");
     })
+//提交评论
+	$("div.box-r>a").on("click",function(){
+		var parent_comment_id=$(this).parent().prev().find("div#replayName>span").attr("comment-id");
+		var parent_comment_user=$(this).parent().prev().find("div#replayName>span").text();
+		var article_id=$(this).parent().parent().parent().parent().attr("comment-box-id");
+		var comment=$(this).parent().prev().find("textarea.txt-huifu.txt-huifu-top").val();
+		if(parent_comment_id==undefined){
+			parent_comment_id='';
+		}
+		console.log(parent_comment_id+"-"+parent_comment_user+'-'+article_id+'-'+comment);
 
+		var msg_item={
+			"parent_comment_id":parent_comment_id,
+			"parent_comment_user":parent_comment_user,
+			"article_id":article_id,
+			"comment":comment
+		}
+		//post请求发送给后端
+        $.post("{% url 'newComment' %}", {data:JSON.stringify(msg_item)},function(callback){
+            console.log(callback);
+            if(callback == 'true'){
+                window.location.reload();
+            }
+        });//end post
 
+	})
+
+{#$("div.child-nav>a").click(function () {#}
+{#    if($(this).attr("class").indexOf("active icons") == -1){#}
+{#        $(this).addClass("active icons").siblings().removeClass("active icons");#}
+{#    }#}
+{#})#}
 </script>
 {% endblock %}
