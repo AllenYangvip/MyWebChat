@@ -7,7 +7,7 @@ from MyChat import models
 # 用户表在 Admin 中的显示
 class UserProfileAdmin(admin.ModelAdmin):
     # 显示项
-    list_display = ('id', 'name', 'signature', 'head_img',)
+    list_display = ('id', 'name', 'head_img',)
     # 搜索项
     search_fields = ['name', ]
 
@@ -15,7 +15,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 # 用户组表在 Admin 中的显示
 class ChatGroupAdmin(admin.ModelAdmin):
     # 显示项
-    list_display = ('id', 'name', 'max_members')
+    list_display = ('id', 'name', )
     # 搜索项
     search_fields = ['name', ]
 

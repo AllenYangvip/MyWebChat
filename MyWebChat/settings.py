@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'MyWebChat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.MyWebChat'),
+        'NAME': os.path.join(BASE_DIR, 'mywebchatdb.sqlite3'),
     }
 }
 
